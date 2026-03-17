@@ -4,15 +4,24 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 6f;
-    public Transform visual; // drag your triangle child here
+
+    private const string WalkDownState = "WalkDown";
+    private const string WalkLeftState = "WalkLeft";
+    private const string WalkRightState = "WalkRight";
+    private const string WalkUpState = "WalkUp";
 
     private Rigidbody2D rb;
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
     private Vector2 movement;
-    private Vector2 lastMoveDirection = Vector2.up;
+    private Vector2 lastMoveDirection = Vector2.down;
+    private string currentAnimationState = WalkDownState;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -26,18 +35,12 @@ public class PlayerController : MonoBehaviour
 
         movement = movement.normalized;
 
-        // Save last non-zero direction so the triangle keeps facing that way
         if (movement != Vector2.zero)
         {
             lastMoveDirection = movement;
         }
 
-        // Rotate the child visual to face move direction
-        if (visual != null)
-        {
-            float angle = Mathf.Atan2(lastMoveDirection.y, lastMoveDirection.x) * Mathf.Rad2Deg;
-            visual.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
-        }
+        UpdateAnimation();
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
@@ -48,5 +51,33 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         rb.linearVelocity = movement * moveSpeed;
+    }
+
+    void UpdateAnimation()
+    {
+        if (animator == null)
+        {
+            return;
+        }
+
+        string targetState = GetAnimationState(lastMoveDirection);
+
+        if (currentAnimationState != targetState)
+        {
+            currentAnimationState = targetState;
+            animator.Play(currentAnimationState, 0, 0f);
+        }
+
+        animator.speed = movement == Vector2.zero ? 0f : 1f;
+    }
+
+    string GetAnimationState(Vector2 direction)
+    {
+        if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+        {
+            return direction.x > 0f ? WalkRightState : WalkLeftState;
+        }
+
+        return direction.y > 0f ? WalkUpState : WalkDownState;
     }
 }
