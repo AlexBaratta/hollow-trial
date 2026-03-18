@@ -41,11 +41,6 @@ public class PlayerController : MonoBehaviour
         }
 
         UpdateAnimation();
-
-        if (Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            Debug.Log("Left mouse button pressed.");
-        }
     }
 
     void FixedUpdate()
