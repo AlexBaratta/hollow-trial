@@ -1,9 +1,13 @@
+using System;
 using UnityEngine;
 
 public class MobHealth : MonoBehaviour
 {
     public int maxHealth = 50;
     private int currentHealth;
+
+    public event Action<int, int> OnHealthChanged;
+    public event Action OnDied;
 
     void Start()
     {
@@ -13,7 +17,7 @@ public class MobHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        Debug.Log(gameObject.name + " took " + damage + " damage. Current health: " + currentHealth);
+        OnHealthChanged?.Invoke(currentHealth, maxHealth);
 
         if (currentHealth <= 0)
         {
@@ -23,7 +27,7 @@ public class MobHealth : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log(gameObject.name + " died.");
+        OnDied?.Invoke();
         Destroy(gameObject);
     }
 }

@@ -1,10 +1,14 @@
+using System;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth = 100;
     private int currentHealth;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    public event Action<int, int> OnHealthChanged;
+    public event Action OnDied;
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -13,7 +17,7 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        Debug.Log("Player took " + damage + " damage. Current health: " + currentHealth);
+        OnHealthChanged?.Invoke(currentHealth, maxHealth);
 
         if (currentHealth <= 0)
         {
@@ -23,8 +27,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log("Player died.");
+        OnDied?.Invoke();
         Destroy(gameObject);
     }
-
 }
