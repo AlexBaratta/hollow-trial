@@ -1486,6 +1486,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   damageAmount: 2
+  knockbackForce: 10
   playerHealth: {fileID: 652350845}
 --- !u!114 &1409917274
 MonoBehaviour:

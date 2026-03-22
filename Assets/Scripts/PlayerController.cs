@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 movement;
     private Vector2 lastMoveDirection = Vector2.down;
     private string currentAnimationState = WalkDownState;
+    private float knockbackTimer;
 
     void Awake()
     {
@@ -45,7 +46,19 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (knockbackTimer > 0)
+        {
+            knockbackTimer -= Time.fixedDeltaTime;
+            return;
+        }
+
         rb.linearVelocity = movement * moveSpeed;
+    }
+
+    public void Knockback(Vector2 force, float duration = 0.2f)
+    {
+        knockbackTimer = duration;
+        rb.linearVelocity = force;
     }
 
     void UpdateAnimation()
