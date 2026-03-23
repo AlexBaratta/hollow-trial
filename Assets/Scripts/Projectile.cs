@@ -7,26 +7,35 @@ public class Projectile : MonoBehaviour
     public int damage = 1;
 
     private Vector2 direction;
+    private float timer;
+    private ObjectShooter shooter;
 
     public void SetDirection(Vector2 dir)
     {
         direction = dir.normalized;
     }
 
-    void Start()
+    public void Launch(Vector2 dir, ObjectShooter owner)
     {
-        Destroy(gameObject, lifespan);
+        direction = dir.normalized;
+        timer = lifespan;
+        shooter = owner;
     }
 
     void Update()
     {
+        timer -= Time.deltaTime;
+        if (timer <= 0f)
+        {
+            Return();
+            return;
+        }
+
         transform.Translate(direction * speed * Time.deltaTime, Space.World);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Projectile hit: " + other.gameObject.name + " (tag: " + other.tag + ")");
-
         if (other.CompareTag("Player"))
             return;
 
@@ -36,6 +45,18 @@ public class Projectile : MonoBehaviour
             mobHealth.TakeDamage(damage);
         }
 
-        Destroy(gameObject);
+        Return();
+    }
+
+    void Return()
+    {
+        if (shooter != null)
+        {
+            shooter.ReturnToPool(gameObject);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
