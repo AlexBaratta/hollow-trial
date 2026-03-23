@@ -307,6 +307,50 @@ MonoBehaviour:
   borderColor: {r: 0, g: 0, b: 0, a: 1}
   backgroundColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   fillColor: {r: 0, g: 0.3921569, b: 0, a: 1}
+--- !u!1 &389872902
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 389872904}
+  - component: {fileID: 389872903}
+  m_Layer: 0
+  m_Name: MobPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &389872903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 389872902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cca26dd82d603be479c345b804a5dd3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobPool
+--- !u!4 &389872904
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 389872902}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.40311, y: 2.31454, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &429275048
 GameObject:
   m_ObjectHideFlags: 0
@@ -1032,6 +1076,7 @@ MonoBehaviour:
   maxMobs: 10
   areaCenter: {x: 0, y: 0}
   areaSize: {x: 10, y: 10}
+  minSpawnDistance: 1.5
 --- !u!4 &915245594
 Transform:
   m_ObjectHideFlags: 0
@@ -1461,3 +1506,4 @@ SceneRoots:
   - {fileID: 750789867}
   - {fileID: 1820272065}
   - {fileID: 915245594}
+  - {fileID: 389872904}
