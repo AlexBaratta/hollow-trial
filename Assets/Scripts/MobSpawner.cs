@@ -26,6 +26,7 @@ public class MobSpawner : MonoBehaviour
     [Header("Spawn Area")]
     public Vector2 areaCenter;
     public Vector2 areaSize = new Vector2(10f, 10f);
+    public float minSpawnDistance = 1.5f;
 
     public event System.Action OnAllMobsCleared;
 
@@ -122,9 +123,22 @@ public class MobSpawner : MonoBehaviour
     private Vector2 GetRandomPosition()
     {
         Vector2 worldCenter = (Vector2)transform.position + areaCenter;
-        float x = Random.Range(worldCenter.x - areaSize.x / 2f, worldCenter.x + areaSize.x / 2f);
-        float y = Random.Range(worldCenter.y - areaSize.y / 2f, worldCenter.y + areaSize.y / 2f);
-        return new Vector2(x, y);
+        int maxAttempts = 20;
+
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        {
+            float x = Random.Range(worldCenter.x - areaSize.x / 2f, worldCenter.x + areaSize.x / 2f);
+            float y = Random.Range(worldCenter.y - areaSize.y / 2f, worldCenter.y + areaSize.y / 2f);
+            Vector2 candidate = new Vector2(x, y);
+
+            if (!Physics2D.OverlapCircle(candidate, minSpawnDistance))
+                return candidate;
+        }
+
+        // Fallback if no clear spot found
+        float fx = Random.Range(worldCenter.x - areaSize.x / 2f, worldCenter.x + areaSize.x / 2f);
+        float fy = Random.Range(worldCenter.y - areaSize.y / 2f, worldCenter.y + areaSize.y / 2f);
+        return new Vector2(fx, fy);
     }
 
     public int ActiveMobCount => activeMobs.Count;
