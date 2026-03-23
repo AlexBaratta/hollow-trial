@@ -27,21 +27,45 @@ public class MobSpawner : MonoBehaviour
     public Vector2 areaCenter;
     public Vector2 areaSize = new Vector2(10f, 10f);
 
+    public event System.Action OnAllMobsCleared;
+
     private List<GameObject> activeMobs = new List<GameObject>();
     private float spawnTimer;
     private int totalWeight;
     private bool initialSpawnDone;
+    private bool hasSpawned;
 
     private void Start()
     {
         totalWeight = 0;
         foreach (var entry in mobTypes)
             totalWeight += entry.weight;
+
+        PrewarmPool();
+    }
+
+    private void PrewarmPool()
+    {
+        if (MobPool.Instance == null)
+            return;
+
+        foreach (var entry in mobTypes)
+        {
+            int count = Mathf.CeilToInt(maxMobs * ((float)entry.weight / totalWeight));
+            MobPool.Instance.Prewarm(entry.prefab, count);
+        }
     }
 
     private void Update()
     {
-        activeMobs.RemoveAll(mob => mob == null);
+        activeMobs.RemoveAll(mob => mob == null || !mob.activeInHierarchy);
+
+        if (hasSpawned && activeMobs.Count == 0)
+        {
+            hasSpawned = false;
+            OnAllMobsCleared?.Invoke();
+            return;
+        }
 
         if (!useWaves)
         {
@@ -73,8 +97,9 @@ public class MobSpawner : MonoBehaviour
                 return;
 
             Vector2 pos = GetRandomPosition();
-            GameObject mob = Instantiate(prefab, pos, Quaternion.identity, transform);
+            GameObject mob = MobPool.Instance.Get(prefab, pos);
             activeMobs.Add(mob);
+            hasSpawned = true;
         }
     }
 

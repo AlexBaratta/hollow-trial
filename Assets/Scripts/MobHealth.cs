@@ -9,9 +9,10 @@ public class MobHealth : MonoBehaviour
     public event Action<int, int> OnHealthChanged;
     public event Action OnDied;
 
-    void Start()
+    private void OnEnable()
     {
         currentHealth = maxHealth;
+        OnHealthChanged?.Invoke(currentHealth, maxHealth);
     }
 
     public void TakeDamage(int damage)
@@ -28,6 +29,6 @@ public class MobHealth : MonoBehaviour
     private void Die()
     {
         OnDied?.Invoke();
-        Destroy(gameObject);
+        MobPool.Instance.Return(gameObject);
     }
 }

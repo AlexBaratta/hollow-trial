@@ -43,6 +43,11 @@ public class HealthBar : MonoBehaviour
         health.OnHealthChanged += UpdateBar;
     }
 
+    public void Unbind(MobHealth health)
+    {
+        health.OnHealthChanged -= UpdateBar;
+    }
+
     private void UpdateBar(int current, int max)
     {
         float ratio = Mathf.Clamp01((float)current / max);
