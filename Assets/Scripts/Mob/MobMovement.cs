@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerFollow : MonoBehaviour
+public class MobMovement : MonoBehaviour
 {
 
     public float moveSpeed = 5f;
@@ -31,7 +31,7 @@ public class PlayerFollow : MonoBehaviour
             Collider2D[] nearby = Physics2D.OverlapCircleAll(transform.position, separationRadius);
             foreach (var col in nearby)
             {
-                if (col.gameObject != gameObject && col.GetComponent<PlayerFollow>() != null)
+                if (col.gameObject != gameObject && col.GetComponent<MobMovement>() != null)
                 {
                     Vector2 away = (Vector2)transform.position - (Vector2)col.transform.position;
                     float dist = away.magnitude;
