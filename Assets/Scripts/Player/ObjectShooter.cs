@@ -39,8 +39,13 @@ public class ObjectShooter : MonoBehaviour
         Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         mouseWorldPos.z = 0f;
 
-        Vector2 direction = (mouseWorldPos - transform.position).normalized;
+        Vector3 playerPos = transform.position;
+        playerPos.z = 0f;
+
+        Vector2 direction = ((Vector2)(mouseWorldPos - playerPos)).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        Debug.Log($"[Shoot] mouseScreen={Mouse.current.position.ReadValue()} mouseWorld={mouseWorldPos} playerPos={playerPos} dir={direction} screen=({Screen.width}x{Screen.height}) camPixel=({mainCamera.pixelWidth}x{mainCamera.pixelHeight}) camPos={mainCamera.transform.position}");  
 
         GameObject projectile = GetFromPool();
         projectile.transform.SetPositionAndRotation(transform.position, Quaternion.Euler(0f, 0f, angle - 90f));
